@@ -1,0 +1,9 @@
+/target
+*.lock
+Rocket.toml
+**/main-rocket.rs
+.*/
+*.bin
+cache/
+response/
+*.txt

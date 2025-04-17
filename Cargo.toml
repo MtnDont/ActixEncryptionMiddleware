@@ -1,0 +1,37 @@
+[package]
+name = "hello-rocket"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+# actix-web = "4.5.1"
+actix-web = "4.10.2"
+# actix-web-lab = "0.20.2"
+actix-web-lab = "0.24.1"
+# actix-files = "0.6.5"
+actix-files = "0.6.6"
+# actix-http = "3.6.0"
+actix-http = "3.10.0"
+base64 = "0.22.0"
+blake3 = "1.5.0"
+chacha20poly1305 = { version = "0.10.1", features = ["stream"] }
+chrono = { version = "0.4.26", features = ["serde"] }
+env_logger = "0.10.0"
+futures-util = "0.3.17"
+pin-project = "1.1.5"
+uuid = { version = "1.4.1", features = ["v4"] }
+rand = "0.8.5"
+regex = "1.11.1"
+serde = { version = "1.0", features = ["derive"] }
+mime = "0.3.17"
+thumbnailer = "0.5.1"
+
+# Signing
+ed25519-dalek = "2.1.1"
+# Encrypting
+x25519-dalek = { version = "2.0.1", features = ["static_secrets"] }
+
+# rocket = { version = "0.5.0-rc.3", features = ["json"] }
+# reqwest = { version = "0.11.13", features = ["json"] }
