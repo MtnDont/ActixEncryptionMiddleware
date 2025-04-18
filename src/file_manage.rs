@@ -98,9 +98,12 @@ pub fn list_dir(path_arg: Option<&Path>) -> Vec<FileDesc> {
         } else {
             parent_path.to_string_lossy().to_string().replacen(ROOT_DIR, "", 1)
         };
+
+        if path.is_symlink() { continue; }
+        
         let metadata = path.metadata().unwrap();
 
-        if metadata.is_symlink() { continue; }
+        //if metadata.is_symlink() { continue; }
         
         files.push(
             FileDesc {

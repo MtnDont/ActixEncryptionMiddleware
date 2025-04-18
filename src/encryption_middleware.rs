@@ -158,7 +158,7 @@ fn bytes_from_file(file_path: &Path) -> [u8; 32] {
 }
 
 fn verify_header(header: &HeaderMap) -> Result<EncHeader, i32> {
-    let nonce: [u8; 24] = if let Some(header_nonce) = header.get("nagicant-nonce") {
+    let nonce: [u8; 24] = if let Some(header_nonce) = header.get("magicant-nonce") {
         // Forces size of slice to match size of nonce
         match header_nonce.as_bytes().try_into() {
             Ok(n) => n,

@@ -95,6 +95,7 @@ async fn file_json_index(req: HttpRequest, file_req: web::Json<file_manage::File
     let filename_arg = if let Some(filename) = json_request.filename.clone() {
         filename
     } else {
+        println!("400 Bad request.");
         return HttpResponse::BadRequest().body("Bad request.");
     };
     println!("path_arg: {}\nfilename_arg: {}", path_arg.to_string(), filename_arg.to_string());
