@@ -141,19 +141,7 @@ impl<B: MessageBody> MessageBody for BodyLogger<B> {
     type Error = B::Error;
 
     fn size(&self) -> BodySize {
-        let size = match self.body.size() {
-            BodySize::None => {
-                return BodySize::None;
-            },
-            BodySize::Stream => {
-                return BodySize::Stream;
-            },
-            BodySize::Sized(s) => s
-        };
-        let ssize = size / 65536;
-        let ssizeg = if (size % 65536) > 0 { 1 } else { 0 };
-        // 16 Additional bytes per enc chunk + 4 len bytes
-        BodySize::Sized(size + (ssize + ssizeg) * (16 + 4))
+        BodySize::Stream // Only Stream encrypted response
     }
 
     fn poll_next(
