@@ -1,10 +1,12 @@
-# actix_web Encryption Middleware
+# actix_web End-to-End Encryption Middleware
 
 ### Preamble
 
 Originally, I started this project as a couple of different ideas. Near the beginning of this project I had recently purchased equipment to use as a NAS and small server between friends. At the same time, the storage on my mobile devices was getting low, and I still wanted to be able to carry photos on my phone to share a moment or a laugh between friends.
 
 I took this moment sit down and look at my understanding of security practices, learn Rust, and try some new things along the way.
+
+This repository includes an example implementation into an actix_web project. It takes POST requests for files or directories and serves the content from them.
 
 ## Requirements
 
