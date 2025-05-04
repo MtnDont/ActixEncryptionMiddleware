@@ -50,14 +50,14 @@ def create_req():
     print(f"Text size: {sys.getsizeof(encrypted_text)}")
     print(f"Tag size: {sys.getsizeof(tag)}")
 
-    print(b64encode(encrypted_text + tag).decode('utf-8'))
-    # base64 Encode appended encrypted text and associated tag bytes
-    b64_enc_str = b64encode(encrypted_text + tag).decode('utf-8')
     # base64 Encode user string
     b64_user_encode = b64encode(str.encode(user)).decode('utf-8')
 
-    # GET 192.168.50.70:25506/pf
-    print(f"curl -v -X GET 192.168.50.70:25506/pf -H 'Content-Type: application/json' -H 'Magicant-Nonce: {nonce_str.decode('utf-8')}' -H 'Authorization: Basic {b64_user_encode}' -d '{b64_enc_str}' --output out.bin")
+    # POST 192.168.50.70:25506/pf
+    with open('request-data.bin', 'wb') as f:
+        f.write(encrypted_text + tag)
+        f.write
+        print(f"curl -v -X POST 192.168.50.70:25506/pf -H 'Content-Type: application/json' -H 'magicant-nonce: {nonce_str.decode('utf-8')}' -H 'Authorization: Basic {b64_user_encode}' -d '{b64_enc_str}' --output out.bin")
 
 def decrypt():
     # Username

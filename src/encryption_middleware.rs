@@ -86,7 +86,6 @@ where
                 }
             };
             
-            println!("request body (middleware): {body:?}");
             println!("request headers: {:?}", headers);
 
             // Check for Existing Keys and Create them if they don't exist
@@ -106,11 +105,7 @@ where
             };
 
             // Decrpyt Request Body
-            let decoded_body = match BASE64_STANDARD.decode(body) {
-                Ok(auth_decode) => auth_decode,
-                Err(_) => return Err(error::ErrorBadRequest(""))
-            };
-            let decrypted_body = match decrypt_body(&decoded_body, &keyset) {
+            let decrypted_body = match decrypt_body(&body, &keyset) {
                 Ok(b) => b,
                 Err(_) => return Err(error::ErrorBadRequest(""))
             };
