@@ -67,18 +67,6 @@ pub fn parse_path(path_arg: String, file_arg: Option<String>) -> Option<PathBuf>
     Some(Path::new(&path_req).to_path_buf())
 }
 
-pub fn parse_path_unrestricted(path_arg: String, file_arg: Option<String>) -> Option<PathBuf> {
-    let path_req: String = if let Some(file) = file_arg {
-            format!("{}/{}", path_arg, file)
-        } else {
-            format!("{}/", path_arg)
-        };
-    if path_req.contains("/../") {
-        return None;
-    }
-    Some(Path::new(&path_req).to_path_buf())
-}
-
 pub fn list_dir(path_arg: Option<&Path>) -> Vec<FileDesc> {
     let dir_entries = if let Some(path) = path_arg {
             path.read_dir().unwrap()

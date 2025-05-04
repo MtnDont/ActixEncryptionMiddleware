@@ -16,13 +16,12 @@ use std::{
     future::{ready, Future, Ready},
     io::Read,
     marker::PhantomData,
-    path::Path,
+    path::{Path, PathBuf},
     pin::Pin,
     task::{Context, Poll},
 };
 
 use crate::keyset::KeySet;
-use crate::file_manage;
 
 pub struct EncryptedResponse;
 
@@ -188,7 +187,7 @@ fn get_keys(name: &str) -> Result<KeySet, i32> {
     
     let priv_key_pathbuf = Path::new(env!("key_path")).join(env!("key_name"));
     let priv_key_path = priv_key_pathbuf.as_path();
-    let req_pub_key_pathbuf = if let Some(path_buf) = file_manage::parse_path_unrestricted(
+    let req_pub_key_pathbuf = if let Some(path_buf) = parse_path_unrestricted(
         "./.magicant".to_string(),
         Some(format!("{}.pub", name))
     ) {
@@ -266,4 +265,16 @@ fn bytes_from_file(file_path: &Path) -> [u8; 32] {
         Ok(_) => buffer,
         Err(_) => [0u8; 32]
     }
+}
+
+pub fn parse_path_unrestricted(path_arg: String, file_arg: Option<String>) -> Option<PathBuf> {
+    let path_req: String = if let Some(file) = file_arg {
+            format!("{}/{}", path_arg, file)
+        } else {
+            format!("{}/", path_arg)
+        };
+    if path_req.contains("/../") {
+        return None;
+    }
+    Some(Path::new(&path_req).to_path_buf())
 }

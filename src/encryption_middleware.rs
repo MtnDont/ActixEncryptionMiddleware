@@ -15,12 +15,11 @@ use std::{
     fs::{self, File},
     future::{ready, Ready},
     io::{Read, Write},
-    path::Path,
+    path::{Path, PathBuf},
     rc::Rc,
 };
 use x25519_dalek::{PublicKey, StaticSecret};
 
-use crate::file_manage;
 use crate::keyset::KeySet;
 
 pub struct E2E;
@@ -203,7 +202,7 @@ fn verify_keys(header_map: &EncHeader) -> Result<KeySet, i32> {
     let rand_generator = OsRng {};
     let priv_key_path = Path::new("./.magicant/key");
     let pub_key_path = Path::new("./.magicant/key.pub");
-    let req_pub_key_pathbuf = if let Some(path_buf) = file_manage::parse_path_unrestricted(
+    let req_pub_key_pathbuf = if let Some(path_buf) = parse_path_unrestricted(
         "./.magicant".to_string(),
         Some(format!("{}.pub", header_map.auth_token))
     ) {
@@ -245,6 +244,18 @@ fn verify_keys(header_map: &EncHeader) -> Result<KeySet, i32> {
         bytes_from_file(req_pub_key_path),
         header_map.nonce
     ))
+}
+
+fn parse_path_unrestricted(path_arg: String, file_arg: Option<String>) -> Option<PathBuf> {
+    let path_req: String = if let Some(file) = file_arg {
+            format!("{}/{}", path_arg, file)
+        } else {
+            format!("{}/", path_arg)
+        };
+    if path_req.contains("/../") {
+        return None;
+    }
+    Some(Path::new(&path_req).to_path_buf())
 }
 
 fn decrypt_body(
