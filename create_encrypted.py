@@ -11,8 +11,7 @@ import sys
 
 def create_req():
     # Create plaintext
-    plain = b'{"path":"bunger/bunger2","filename":"fisting.png"}'
-    #plain = b'{"path":"bunger","filename":"sweepy.txt"}'
+    plain = b'{"path":"path/path2","filename":"test.png"}'
 
     # Create nonce for cipher
     nonce_str = b'testingtestingtestingtes'
@@ -50,14 +49,14 @@ def create_req():
     print(f"Text size: {sys.getsizeof(encrypted_text)}")
     print(f"Tag size: {sys.getsizeof(tag)}")
 
-    # base64 Encode user string
+    # base64 Encode user and nonce string
     b64_user_encode = b64encode(str.encode(user)).decode('utf-8')
+    b64_nonce_encode = b64encode(str.encode(nonce_str)).decode('utf-8')
 
     # POST 192.168.50.70:25506/pf
     with open('request-data.bin', 'wb') as f:
         f.write(encrypted_text + tag)
-        f.write
-        print(f"curl -v -X POST 192.168.50.70:25506/pf -H 'Content-Type: application/json' -H 'magicant-nonce: {nonce_str.decode('utf-8')}' -H 'Authorization: Basic {b64_user_encode}' -d '{b64_enc_str}' --output out.bin")
+        print(f"curl -v -X POST 192.168.50.70:25506/pf -H 'Content-Type: application/json' -H 'magicant-nonce: {b64_nonce_encode}' -H 'Authorization: Basic {b64_user_encode}' --data-binary '@request-data.bin' --output out.bin")
 
 def decrypt():
     # Username
