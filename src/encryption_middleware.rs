@@ -85,8 +85,6 @@ where
                     };
                 }
             };
-            
-            println!("request headers: {:?}", headers);
 
             // Check for Existing Keys and Create them if they don't exist
             // Obtains KeySet containing derived_secret
@@ -127,7 +125,6 @@ where
                 }
             }
 
-            println!("response: {:?}", res.headers());
             Ok(res)
         })
     }
@@ -152,15 +149,22 @@ fn bytes_from_file(file_path: &Path) -> [u8; 32] {
 }
 
 fn verify_header(header: &HeaderMap) -> Result<EncHeader, i32> {
-    let nonce: [u8; 24] = if let Some(header_nonce) = header.get("magicant-nonce") {
-        // Forces size of slice to match size of nonce
-        match header_nonce.as_bytes().try_into() {
+    // Try to decode magicant-nonce header if exists
+    let nonce_b64 = if let Some(header_nonce_b64) = header.get("magicant-nonce") {
+        match BASE64_STANDARD.decode(header_nonce_b64.as_bytes()) {
             Ok(n) => n,
             Err(_) => return Err(401)
         }
     }
     else {
         return Err(403);
+    };
+
+    // Forces size of slice to match size of nonce
+    let nonce: [u8; 24] = match nonce_b64.try_into() {
+        //match header_nonce.as_bytes().try_into() {
+        Ok(n) => n,
+        Err(_) => return Err(401)
     };
     let auth_header = if let Some(header_auth) = header.get("Authorization") {
         header_auth
